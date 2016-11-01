@@ -1,7 +1,8 @@
-package com.example.aldrin.fileupload;
+package com.example.aldrin.fileupload.utilities;
 
 /**
  * Created by aldrin on 31/10/16.
+ * This class is used to hold constans used throughout the application.
  */
 
 public class Constants {

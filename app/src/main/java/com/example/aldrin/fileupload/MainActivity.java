@@ -9,11 +9,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.aldrin.fileupload.utilities.Constants;
+import com.example.aldrin.fileupload.utilities.UtilityMethods;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.aldrin.fileupload.UtilityClasses.onCaptureImageResult;
+import static com.example.aldrin.fileupload.utilities.UtilityMethods.onCaptureImageResult;
 
 /**
  * This activity is used to uplaod images and display them on screen.
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.btn_start_camera)
     void takePhoto() {
         userChoosenTask = "Take Photo";
-        boolean result=UtilityClasses.checkPermission(MainActivity.this);
+        boolean result= UtilityMethods.checkPermission(MainActivity.this);
         if (!result)
             return;
         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

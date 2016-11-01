@@ -1,4 +1,4 @@
-package com.example.aldrin.fileupload;
+package com.example.aldrin.fileupload.utilities;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -14,19 +14,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import com.example.aldrin.fileupload.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.example.aldrin.fileupload.Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static com.example.aldrin.fileupload.utilities.Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
 
 /**
  * Created by Aldrin on 31-10-2016.
  * This class used to hold some utility methods which may come in handy for the entire application.
  */
 
-public class UtilityClasses {
+public class UtilityMethods {
 
     /**
      * To check if a dangerous permission is given.
