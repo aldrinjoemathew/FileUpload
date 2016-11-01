@@ -17,6 +17,19 @@ import android.provider.MediaStore;
  */
 
 public class FilePath {
+
+    public static final String DOWNLOADS_BASE_URL = "content://downloads/public_downloads";
+    public static final String EXTERNAL_STORAGE_DOCUMENT = "com.android.externalstorage.documents";
+    public static final String DOWNLOADS_DOCUMENT = "com.android.providers.downloads.documents";
+    public static final String MEDIA_DOCUMENT = "com.android.providers.media.documents";
+    public static final String GOOGLE_PHOTOS = "com.google.android.apps.photos.content";
+    public static final String TYPE_VIDEO = "video";
+    public static final String TYPE_AUDIO= "audio";
+    public static final String TYPE_IMAGE = "image";
+    public static final String TYPE_PRIMARY = "primary";
+    public static final String SCHEME_CONTENT = "content";
+    public static final String SCHEME_FILE = "file";
+
     /**
      * Method for return file path of Gallery image
      *
@@ -33,7 +46,7 @@ public class FilePath {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
-                if ("primary".equalsIgnoreCase(type)) {
+                if (TYPE_PRIMARY.equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
             }
@@ -41,7 +54,7 @@ public class FilePath {
             else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                        Uri.parse(DOWNLOADS_BASE_URL), Long.valueOf(id));
                 return getDataColumn(context, contentUri, null, null);
             }
             // MediaProvider
@@ -50,11 +63,11 @@ public class FilePath {
                 final String[] split = docId.split(":");
                 final String type = split[0];
                 Uri contentUri = null;
-                if ("image".equals(type)) {
+                if (TYPE_IMAGE.equals(type)) {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
+                } else if (TYPE_VIDEO.equals(type)) {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
+                } else if (TYPE_AUDIO.equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
                 final String selection = "_id=?";
@@ -65,14 +78,14 @@ public class FilePath {
             }
         }
         // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        else if (SCHEME_CONTENT.equalsIgnoreCase(uri.getScheme())) {
             // Return the remote address
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
             return getDataColumn(context, uri, null, null);
         }
         // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        else if (SCHEME_FILE.equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
         return null;
@@ -92,9 +105,7 @@ public class FilePath {
                                        String[] selectionArgs) {
         Cursor cursor = null;
         final String column = "_data";
-        final String[] projection = {
-                column
-        };
+        final String[] projection = {column};
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
                     null);
@@ -114,7 +125,7 @@ public class FilePath {
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
     public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+        return EXTERNAL_STORAGE_DOCUMENT.equals(uri.getAuthority());
     }
 
     /**
@@ -122,7 +133,7 @@ public class FilePath {
      * @return Whether the Uri authority is DownloadsProvider.
      */
     public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+        return DOWNLOADS_DOCUMENT.equals(uri.getAuthority());
     }
 
     /**
@@ -130,7 +141,7 @@ public class FilePath {
      * @return Whether the Uri authority is MediaProvider.
      */
     public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
+        return MEDIA_DOCUMENT.equals(uri.getAuthority());
     }
 
     /**
@@ -138,6 +149,6 @@ public class FilePath {
      * @return Whether the Uri authority is Google Photos.
      */
     public static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+        return GOOGLE_PHOTOS.equals(uri.getAuthority());
     }
 }

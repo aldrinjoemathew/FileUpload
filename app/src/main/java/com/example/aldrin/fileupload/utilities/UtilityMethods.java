@@ -7,12 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -25,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.example.aldrin.fileupload.utilities.Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
-import static com.example.aldrin.fileupload.utilities.Constants.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
 /**
  * Created by Aldrin on 31-10-2016.

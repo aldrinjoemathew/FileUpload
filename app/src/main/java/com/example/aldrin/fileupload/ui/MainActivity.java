@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.aldrin.fileupload.R;
 import com.example.aldrin.fileupload.adapters.AdapterImageDisplay;
@@ -20,14 +19,15 @@ import com.example.aldrin.fileupload.utilities.ImageDBController;
 import com.example.aldrin.fileupload.utilities.UtilityMethods;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.aldrin.fileupload.utilities.Constants.FROM_GALLERY;
+import static com.example.aldrin.fileupload.utilities.Constants.INTENT_TYPE_IMAGE;
+import static com.example.aldrin.fileupload.utilities.Constants.TAKE_PHOTO;
 import static com.example.aldrin.fileupload.utilities.UtilityMethods.onCaptureImageResult;
 
 /**
@@ -51,22 +51,15 @@ public class MainActivity extends AppCompatActivity {
         setRecyclerView();
     }
 
+    /**
+     * To set the recycler view when app first launches.
+     */
     private void setRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mImages = ImageDBController.getAllImages();
-        dislplayDatabase();
         mAdapter = new AdapterImageDisplay(this, mImages);
         rvImageDisplay.setLayoutManager(layoutManager);
         rvImageDisplay.setAdapter(mAdapter);
-    }
-
-    private void dislplayDatabase() {
-        for (int i=0; i<mImages.size(); i++) {
-            Log.d("INFO", String.valueOf(mImages.get(i).getId()));
-            if (mImages.get(i).getImage_name()==null) break;
-            Log.d("INFO", mImages.get(i).getImage_name());
-            Log.d("INFO", mImages.get(i).getImage());
-        }
     }
 
     @Override
@@ -75,47 +68,40 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.UPLOAD_IMAGE)  {
                 String filepath = FilePath.getPath(this, data.getData());
-                LocalImage newImage = new LocalImage();
-                newImage.setImage(filepath);
-                newImage.setImage_name(filepath);
-                newImage.save();
-                mImages.add(newImage);
-                mAdapter.notifyDataSetChanged();
-                dislplayDatabase();
+                storeImageInDatabaseAndNotifyAdapter(filepath);
             } else if (requestCode == Constants.REQUEST_CAMERA){
                 File image = onCaptureImageResult(data);
-                FileInputStream fileInputStream;
-                try {
-                    if (image != null) {
-                        fileInputStream = new FileInputStream(image.getPath());
-                        byte[] imageBytes = new byte[fileInputStream.available()];
-                        LocalImage newImage = new LocalImage();
-                        newImage.setImage(image.getAbsolutePath());
-                        newImage.setImage_name(image.getName());
-                        newImage.save();
-                        mImages.add(newImage);
-                        mAdapter.notifyDataSetChanged();
-                        dislplayDatabase();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (image != null) {
+                    storeImageInDatabaseAndNotifyAdapter(image.getAbsolutePath());
                 }
             }
         }
     }
 
+    /**
+     * Store the path to image and notifies the adapter to update view.
+     * @param filepath
+     */
+    private void storeImageInDatabaseAndNotifyAdapter(String filepath) {
+        LocalImage newImage = new LocalImage();
+        newImage.setImage(filepath);
+        newImage.setImage_name(filepath);
+        newImage.save();
+        mImages.add(newImage);
+        mAdapter.notifyDataSetChanged();
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if(mUserChoosenTask.equals("Take Photo"))
+                    if(mUserChoosenTask.equals(TAKE_PHOTO))
                         takePhoto();
-                    else if(mUserChoosenTask.equals("Choose from Library"))
+                    else if(mUserChoosenTask.equals(FROM_GALLERY))
                         uploadPhoto();
                 } else {
-                    //code for deny
+                    finish();
                 }
                 break;
         }
@@ -123,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_start_camera)
     void takePhoto() {
-        mUserChoosenTask = "Take Photo";
+        mUserChoosenTask = TAKE_PHOTO;
         boolean readPermission= UtilityMethods.checkPermissionStorage(MainActivity.this);
         if (!readPermission)
             return;
@@ -133,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_upload_image)
     void uploadPhoto() {
-        mUserChoosenTask = "Choose from Library";
+        mUserChoosenTask = FROM_GALLERY;
         boolean readPermission= UtilityMethods.checkPermissionStorage(MainActivity.this);
         if (!readPermission)
             return;
         mIntent = new Intent();
-        mIntent.setType("image/*");
+        mIntent.setType(INTENT_TYPE_IMAGE);
         mIntent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(mIntent, "Select image"), Constants.UPLOAD_IMAGE);
+        startActivityForResult(Intent.createChooser(mIntent, FROM_GALLERY), Constants.UPLOAD_IMAGE);
     }
 }

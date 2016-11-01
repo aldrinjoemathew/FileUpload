@@ -8,6 +8,9 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * Created by aldrin on 1/11/16.
+ * Custom aplication class for the application.
+ * DBFlow is initialized here.
+ * DBFlow logging is also enabled.
  */
 
 public class ApplicationClass extends Application {
