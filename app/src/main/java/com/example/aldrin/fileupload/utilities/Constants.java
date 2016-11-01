@@ -8,6 +8,7 @@ package com.example.aldrin.fileupload.utilities;
 public class Constants {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 125;
     public static final int REQUEST_CAMERA = 1;
     public static final int UPLOAD_IMAGE = 2;
 }
