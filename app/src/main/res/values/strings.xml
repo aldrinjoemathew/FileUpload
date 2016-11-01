@@ -2,4 +2,6 @@
     <string name="app_name">FileUpload</string>
     <string name="upload_image">Upload image</string>
     <string name="start_camera">Start camera</string>
+    <string name="alert_title_storage_permission">Permission necessary</string>
+    <string name="alert_message_storage_permission">External storage permission is necessary</string>
 </resources>

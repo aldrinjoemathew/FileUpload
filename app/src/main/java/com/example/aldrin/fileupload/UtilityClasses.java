@@ -16,7 +16,6 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -24,10 +23,19 @@ import static com.example.aldrin.fileupload.Constants.MY_PERMISSIONS_REQUEST_REA
 
 /**
  * Created by Aldrin on 31-10-2016.
+ * This class used to hold some utility methods which may come in handy for the entire application.
  */
 
 public class UtilityClasses {
 
+    /**
+     * To check if a dangerous permission is given.
+     * For APIs below marshmallow permission are provided at installation time, return true.
+     * For other APIs the permission can be altered at any time, so the permission are checked
+     * first and displays a resquest permission dialog if not given already.
+     * @param context
+     * @return
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static boolean checkPermission(final Context context)
     {
@@ -38,8 +46,8 @@ public class UtilityClasses {
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
                     alertBuilder.setCancelable(true);
-                    alertBuilder.setTitle("Permission necessary");
-                    alertBuilder.setMessage("External storage permission is necessary");
+                    alertBuilder.setTitle(R.string.alert_title_storage_permission);
+                    alertBuilder.setMessage(R.string.alert_message_storage_permission);
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
                         public void onClick(DialogInterface dialog, int which) {
@@ -60,8 +68,17 @@ public class UtilityClasses {
         }
     }
 
-    public static void onCaptureImageResult(Intent data) {
+    /**
+     * On taking an image from camera the bitmat data is extracted from intent, and is stored as
+     * a JPG file with current time in milli seconds as the file name.
+     * @param data
+     * @return
+     */
+    public static Boolean onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        if (thumbnail == null) {
+            return false;
+        }
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File destination = new File(Environment.getExternalStorageDirectory(),
@@ -74,6 +91,8 @@ public class UtilityClasses {
             fo.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 }

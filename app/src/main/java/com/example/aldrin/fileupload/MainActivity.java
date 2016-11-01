@@ -7,13 +7,21 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.aldrin.fileupload.UtilityClasses.onCaptureImageResult;
 
+/**
+ * This activity is used to uplaod images and display them on screen.
+ */
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.rv_image_display)
+    RecyclerView rvImageDisplay;
 
     private Intent intent;
     private String userChoosenTask;
@@ -23,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
     }
 
     @Override
