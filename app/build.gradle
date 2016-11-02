@@ -41,4 +41,5 @@ dependencies {
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
     debugCompile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.17.0'
 }

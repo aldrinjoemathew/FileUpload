@@ -1,8 +1,6 @@
 package com.example.aldrin.fileupload.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +42,6 @@ public class AdapterImageDisplay extends RecyclerView.Adapter<AdapterImageDispla
 
     @Override
     public void onBindViewHolder(ImageHolder holder, int position) {
-        /*byte[] imageData = images.get(position).getImage().getBlob();
-        Bitmap image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-        holder.ivImage.setImageBitmap(image);*/
         holder.tvImageTitle.setText(images.get(position).getImage_name());
         if (images.get(position).getImage() != null)
             Picasso.with(context)

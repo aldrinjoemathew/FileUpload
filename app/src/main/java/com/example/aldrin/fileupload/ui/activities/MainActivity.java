@@ -1,4 +1,4 @@
-package com.example.aldrin.fileupload.ui;
+package com.example.aldrin.fileupload.ui.activities;
 
 import android.app.Activity;
 import android.content.Intent;
